@@ -22,6 +22,9 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "spi.h"
+#include "tim.h"
+extern DMA_HandleTypeDef hdma_spi1_rx, hdma_spi1_tx;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -198,6 +201,11 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f4xx.s).                    */
 /******************************************************************************/
 
-/* USER CODE BEGIN 1 */
+void DMA2_Stream0_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma_spi1_rx); }
+void DMA2_Stream3_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma_spi1_tx); }
+void SPI1_IRQHandler(void) { HAL_SPI_IRQHandler(&hspi1); }
+void TIM6_DAC_IRQHandler(void) { HAL_TIM_IRQHandler(&htim6); }
 
+
+/* USER CODE BEGIN 1 */
 /* USER CODE END 1 */

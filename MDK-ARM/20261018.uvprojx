@@ -330,7 +330,7 @@
             <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>3</v6Lang>
-            <v6LangP>5</v6LangP>
+            <v6LangP>3</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
             <v6Lto>0</v6Lto>
@@ -385,9 +385,17 @@
           <GroupName>Application/User/IMU</GroupName>
           <Files>
             <File>
-              <FileName>imu.c</FileName>
+              <FileName>bmi088.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../UserCode/imu.c</FilePath>
+              <FilePath>../UserCode/bmi088.c</FilePath>
+            </File>
+            <File>
+              <FileName>imu.cpp</FileName><FileType>8</FileType>
+              <FilePath>../UserCode/imu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>imu_app.cpp</FileName><FileType>8</FileType>
+              <FilePath>../UserCode/imu_app.cpp</FilePath>
             </File>
           </Files>
         </Group>

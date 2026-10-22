@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-# include "imu.h"
+#include "imu_app.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,22 +45,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile uint8_t imu_init_ok = 0;
-uint8_t imu_acc_id = 0;
-uint8_t imu_gyro_id = 0;
-
-static uint8_t acc_bytes[6];
-static uint8_t gyro_bytes[6];
-
-volatile int16_t acc_raw[3];
-volatile int16_t gyro_raw[3];
-
-volatile float acc_g[3];      // 单位 g
-volatile float gyro_dps[3];   // 单位 °/s
-volatile uint32_t imu_sample_count = 0;
-
-float acc_mps2[3];
-float gyro_radps[3];
 /* USER CODE END PV */
 
 
@@ -108,12 +92,7 @@ int main(void)
   MX_TIM6_Init();
 
   /* USER CODE BEGIN 2 */
-  HAL_Delay(50);  // 留出上电稳定时间
-
-  imu_init_ok = bmi088_init();
-
-  bmi088_accel_read_reg(0x00, &imu_acc_id, 1);
-  bmi088_gyro_read_reg(0x00, &imu_gyro_id, 1);
+  imu_app_init();
   /* USER CODE END 2 */
 
 
@@ -124,32 +103,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    if (imu_init_ok == 1)
-    {
-      bmi088_accel_read_reg(0x12, acc_bytes, 6);
-      bmi088_gyro_read_reg(0x02, gyro_bytes, 6);
-
-
-      for (uint8_t i = 0; i < 3; i++)
-      {
-        // 每轴低字节在前，高字节在后。
-        acc_raw[i] = (int16_t)(
-            ((uint16_t)acc_bytes[2 * i + 1] << 8) |
-            acc_bytes[2 * i]);
-
-        gyro_raw[i] = (int16_t)(
-            ((uint16_t)gyro_bytes[2 * i + 1] << 8) |
-            gyro_bytes[2 * i]);
-
-        acc_calculate(acc_mps2);
-        gyro_calculate(gyro_radps);
-      }
-
-      imu_sample_count++;
-    }
-
-    HAL_Delay(100); // 先用约10Hz读取，方便观察
-
+    imu_app_poll();
   }
   /* USER CODE END 3 */
 }
