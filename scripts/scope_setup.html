@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8">
+<meta name="imu-scope-setup" content="BMI088 project presets">
+<title>BMI088 Scope 预设</title>
+<style>body{font:17px system-ui;max-width:760px;margin:60px auto;padding:20px;background:#10151d;color:#e8eef8}button,a{font:inherit;margin:8px;padding:12px;color:#80c7ff}button{background:#263449;border:1px solid #527397;border-radius:6px}p{line-height:1.7}</style>
+<h1>BMI088 Scope 预设</h1>
+<p>选择观测内容后会打开 Scope。点击 Start 开始绘图。只更换本工程的变量预设，其他工程保留。</p>
+<button onclick="apply('angles')">Roll / Pitch / Yaw</button>
+<button onclick="apply('filters')">互补滤波 / Mahony 对比</button>
+<button onclick="apply('bias')">陀螺仪校准前 / 后</button>
+<button onclick="apply('sensors')">加速度 / 角速度</button>
+<p>更换预设前，先在 Scope 中停止采样并关闭旧的 Scope 页面，再回到本页选择。这样旧页面不会覆盖新预设。</p>
+<p>重新烧录：先在 Scope 中 Disconnect，退出 Keil Debug，再烧录；完成后重新运行项目中的启动脚本。</p>
+<script>
+const config=/*PRESETS*/null;
+function apply(name){
+  const project=config.presets[name];
+  let all=JSON.parse(localStorage.getItem('scope.projects.v1')||'{}');
+  all[config.projectKey]={...project,updatedAt:Date.now()};
+  localStorage.setItem('scope.projects.v1',JSON.stringify(all));
+  localStorage.setItem('scope.elfPath',project.elfPath);
+  localStorage.setItem('scope.selectedProfile','stlink');
+  localStorage.setItem('scope.sampleHz','50');
+  localStorage.setItem('scope.projectPad.openOnStartup','false');
+  location.replace('/');
+}
+const preset=new URLSearchParams(location.search).get('preset');
+if(config && config.presets[preset]) apply(preset);
+</script></html>
