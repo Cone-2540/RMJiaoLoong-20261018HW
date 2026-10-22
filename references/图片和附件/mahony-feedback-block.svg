@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="740" viewBox="0 0 1600 740" role="img" aria-labelledby="title desc">
+  <title id="title">Mahony 六轴姿态解算反馈框图</title>
+  <desc id="desc">加速度计比力经低通滤波和归一化得到测量方向 u_m；当前姿态 q 预测机体系下的静止比力方向 u_p。按 e = u_m × u_p 构造误差，分别经过比例 K_P 与积分 K_I/s 支路，与陀螺仪角速度相加。修正后的角速度用于四元数更新和归一化，得到的 q 再反馈到方向预测。积分支路采用讲义式（1）（2）的补偿量加法形式。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 1 1 L 11 6 L 1 11 Z" fill="#334155"/>
+    </marker>
+    <style>
+      text { font-family: "Hiragino Sans GB", "PingFang SC", "Noto Sans CJK SC", sans-serif; fill: #1e293b; }
+      .heading { font-size: 30px; font-weight: 600; }
+      .label { font-size: 25px; }
+      .formula { font-size: 25px; }
+      .small { font-size: 21px; fill: #475569; }
+      .sub { font-size: 17px; baseline-shift: sub; }
+      .sup { font-size: 17px; baseline-shift: super; }
+      .box { fill: #f8fafc; stroke: #475569; stroke-width: 2; }
+      .feedback { fill: #eff6ff; stroke: #2563eb; stroke-width: 2; }
+      .wire { fill: none; stroke: #334155; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
+      .junction { fill: #334155; }
+    </style>
+  </defs>
+  <rect width="1600" height="740" fill="white"/>
+  <text class="heading" x="40" y="48">Mahony 六轴姿态解算反馈框图</text>
+
+  <!-- 主通路：校准后的机体系角速度 → 求和 → 四元数更新 → 姿态。 -->
+  <rect class="box" x="560" y="215" width="180" height="90" rx="8"/>
+  <text class="label" x="650" y="251" text-anchor="middle">陀螺仪角速度</text>
+  <text class="formula" x="650" y="286" text-anchor="middle">ω<tspan class="sub">m</tspan></text>
+  <path class="wire" d="M 740 260 H 810"/>
+  <circle cx="840" cy="260" r="30" fill="white" stroke="#334155" stroke-width="2.5"/>
+  <text x="840" y="270" font-size="33" text-anchor="middle">Σ</text>
+  <text class="label" x="783" y="246">+</text>
+  <text class="label" x="861" y="222">+</text>
+  <text class="label" x="861" y="317">+</text>
+  <path class="wire" d="M 870 260 H 1030"/>
+  <text class="formula" x="948" y="243" text-anchor="middle">ω<tspan class="sub">c</tspan></text>
+  <rect class="box" x="1030" y="210" width="280" height="100" rx="8"/>
+  <text class="label" x="1170" y="251" text-anchor="middle">四元数更新</text>
+  <text class="small" x="1170" y="287" text-anchor="middle">积分并归一化</text>
+  <path class="wire" d="M 1310 260 H 1540"/>
+  <text class="formula" x="1500" y="239" text-anchor="middle">q</text>
+
+  <!-- 误差反馈：叉积的顺序与讲义一致；两条支路均按式（1）（2）相加。 -->
+  <path class="wire" d="M 490 520 V 117 H 640"/>
+  <text class="formula" x="510" y="340">e</text>
+  <circle class="junction" cx="490" cy="400" r="5"/>
+  <path class="wire" d="M 490 400 H 640"/>
+  <rect class="feedback" x="640" y="80" width="180" height="75" rx="8"/>
+  <text class="label" x="730" y="111" text-anchor="middle">比例</text>
+  <text class="formula" x="730" y="143" text-anchor="middle">K<tspan class="sub">P</tspan></text>
+  <path class="wire" d="M 820 117 H 840 V 230"/>
+  <text class="formula" x="876" y="164">K<tspan class="sub">P</tspan> e</text>
+  <rect class="feedback" x="640" y="350" width="180" height="100" rx="8"/>
+  <text class="label" x="730" y="384" text-anchor="middle">积分</text>
+  <text class="formula" x="730" y="425" text-anchor="middle">K<tspan class="sub">I</tspan> / s</text>
+  <path class="wire" d="M 820 400 H 840 V 290"/>
+  <text class="formula" x="876" y="373">b</text>
+  <path d="M 878 349 L 884 344 L 890 349" fill="none" stroke="#1e293b" stroke-width="1.7"/>
+
+  <!-- 方向测量和姿态预测在机体系比较，构成闭合反馈回路。 -->
+  <rect class="box" x="40" y="520" width="240" height="100" rx="8"/>
+  <text class="label" x="160" y="558" text-anchor="middle">加速度计比力 f<tspan class="sup">b</tspan></text>
+  <text class="small" x="160" y="594" text-anchor="middle">低通滤波、归一化</text>
+  <path class="wire" d="M 280 570 H 340"/>
+  <text class="formula" x="309" y="548" text-anchor="middle">u<tspan class="sub">m</tspan></text>
+  <rect class="feedback" x="340" y="520" width="300" height="100" rx="8"/>
+  <text class="label" x="490" y="558" text-anchor="middle">方向误差</text>
+  <text class="formula" x="490" y="596" text-anchor="middle">e = u<tspan class="sub">m</tspan> × u<tspan class="sub">p</tspan></text>
+  <circle class="junction" cx="1420" cy="260" r="5"/>
+  <path class="wire" d="M 1420 260 V 520"/>
+  <rect class="box" x="1270" y="520" width="300" height="100" rx="8"/>
+  <text class="label" x="1420" y="558" text-anchor="middle">预测静止比力方向</text>
+  <text class="formula" x="1420" y="596" text-anchor="middle">u<tspan class="sub">p</tspan> = R<tspan class="sub">wb</tspan>(q)<tspan class="sup">T</tspan> u<tspan class="sub">0</tspan></text>
+  <path class="wire" d="M 1270 570 H 640"/>
+  <text class="formula" x="1050" y="548" text-anchor="middle">u<tspan class="sub">p</tspan></text>
+  <path class="wire" d="M 1420 678 V 620"/>
+  <text class="formula" x="1420" y="714" text-anchor="middle">u<tspan class="sub">0</tspan> = (0, 0, 1)</text>
+  <text class="small" x="40" y="701">世界系 Z 轴向上；方向向量均在机体系比较。积分支路采用式（1）（2）的补偿量加法形式。</text>
+</svg>

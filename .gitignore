@@ -1,0 +1,11 @@
+.idea/
+build/
+tmp/
+__pycache__/
+*.pyc
+MDK-ARM/20261018/
+MDK-ARM/DebugConfig/
+*.uvguix.*
+*.uvoptx
+*.bak
+*.log
